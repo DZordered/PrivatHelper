@@ -31,9 +31,7 @@ public class InfoLaunchActivity extends Activity {
     public static final String API_KEY = "AIzaSyAtOWqrjsqMXDM9fG8LPTSznlu6Nd6OFRA";
 
     private Button goBack;
-    private Button goToMap;
 
-    private TextView setInfo;
     private ListView statementsView;
 
     private ArrayList<Statement> list;
@@ -93,10 +91,7 @@ public class InfoLaunchActivity extends Activity {
                 latitude = geometryData.results.get(0).geometry.location.lat;
                 longtitude =geometryData.results.get(0).geometry.location.lng;
 
-                startActivity(new Intent(InfoLaunchActivity.this, MapLoader.class).putExtra("geoDataValues",
-                        new String []{
-                                latitude,
-                                longtitude}));
+                toMap(latitude, longtitude);
             }
 
             @Override
@@ -105,6 +100,10 @@ public class InfoLaunchActivity extends Activity {
             }
         });
 
+    }
+    public void toMap(String lat, String lng){
+        startActivity(new Intent(InfoLaunchActivity.this, MapLoader.class).putExtra("geoDataValues",
+                new String []{lat, lng}));
     }
 
 }

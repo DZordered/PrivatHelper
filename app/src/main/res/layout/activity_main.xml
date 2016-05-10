@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Get all ATM&apos;s in city"
+        android:text="Get all ATM&apos;s in city:"
         android:id="@+id/atmInfo"
         android:layout_marginTop="40dp"
         android:layout_below="@+id/getStatementsButton"
@@ -41,15 +41,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editAtmCity"
-        android:layout_alignTop="@+id/atmInfo"
+        android:layout_above="@+id/getAtmsButton"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/atmInfo" />
+        android:layout_toEndOf="@+id/editCity" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get"
-        android:id="@+id/button2"
+        android:id="@+id/getAtmsButton"
+        android:layout_marginTop="40dp"
         android:layout_below="@+id/atmInfo"
         android:layout_alignParentStart="true" />
 
@@ -59,9 +60,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Get all terminals in city:"
         android:id="@+id/terminalsInfo"
-        android:layout_below="@+id/button2"
-        android:layout_alignStart="@+id/button2"
-        android:layout_marginTop="44dp" />
+        android:layout_below="@+id/getAtmsButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="38dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -119,7 +120,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Info"
-        android:id="@+id/toMapButton"
+        android:id="@+id/toInfoButton"
         android:layout_alignBottom="@+id/getStatementsButton"
         android:layout_toEndOf="@+id/terminalsInfo" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="info"
+        android:id="@+id/toInfoAtmButton"
+        android:layout_alignTop="@+id/getAtmsButton"
+        android:layout_alignEnd="@+id/editAtmCity" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="address:"
+        android:id="@+id/textView2"
+        android:layout_above="@+id/toInfoAtmButton"
+        android:layout_toStartOf="@+id/editAddress" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addressAtmEdit"
+        android:layout_above="@+id/toInfoAtmButton"
+        android:layout_alignStart="@+id/editAddress"
+        android:layout_alignEnd="@+id/stateInfo" />
 </RelativeLayout>

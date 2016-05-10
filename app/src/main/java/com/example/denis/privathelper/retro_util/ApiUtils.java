@@ -1,6 +1,7 @@
 package com.example.denis.privathelper.retro_util;
 
 
+import com.example.denis.privathelper.pojos.AtmResponse;
 import com.example.denis.privathelper.pojos.GeometryData;
 import com.example.denis.privathelper.pojos.Location;
 import com.example.denis.privathelper.pojos.Statement;
@@ -20,4 +21,9 @@ public interface ApiUtils {
     @GET("maps/api/geocode/json")
     Call<GeometryData> getGeoData(@Query("address") String address,
                                   @Query("key") String key);
+
+    @GET("/p24api/infrastructure?json&atm")
+    Call<AtmResponse> getAtms(@Query("address") String address,
+                              @Query("city") String city);
+
 }
