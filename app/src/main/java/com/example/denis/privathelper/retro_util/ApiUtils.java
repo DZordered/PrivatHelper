@@ -3,14 +3,15 @@ package com.example.denis.privathelper.retro_util;
 
 import com.example.denis.privathelper.pojos.AtmResponse;
 import com.example.denis.privathelper.pojos.GeometryData;
-import com.example.denis.privathelper.pojos.Location;
 import com.example.denis.privathelper.pojos.Statement;
+import com.example.denis.privathelper.pojos.TerminalResponse;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit.Call;
+import retrofit.http.GET;
+import retrofit.http.Query;
+import rx.Observable;
 
 public interface ApiUtils {
 
@@ -25,5 +26,10 @@ public interface ApiUtils {
     @GET("/p24api/infrastructure?json&atm")
     Call<AtmResponse> getAtms(@Query("address") String address,
                               @Query("city") String city);
+
+    @GET("p24api/infrastructure?json&tso")
+    Call<TerminalResponse> getTerminals(@Query("city") String city,
+                                        @Query("address") String address);
+
 
 }

@@ -18,11 +18,12 @@ import com.example.denis.privathelper.retro_util.ApiUtils;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+
 
 public class InfoLaunchActivity extends Activity {
 
@@ -86,7 +87,7 @@ public class InfoLaunchActivity extends Activity {
         final Call<GeometryData> geoData = utils.getGeoData(address, api_key);
         geoData.enqueue(new Callback<GeometryData>() {
             @Override
-            public void onResponse(Call<GeometryData> call, Response<GeometryData> response) {
+            public void onResponse(Response<GeometryData> response) {
                 geometryData = response.body();
                 latitude = geometryData.results.get(0).geometry.location.lat;
                 longtitude =geometryData.results.get(0).geometry.location.lng;
@@ -95,9 +96,10 @@ public class InfoLaunchActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<GeometryData> call, Throwable t) {
+            public void onFailure(Throwable t) {
                 t.getStackTrace();
             }
+
         });
 
     }

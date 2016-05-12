@@ -1,29 +1,32 @@
 package com.example.denis.privathelper;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.example.denis.privathelper.activities.InfoAtmLaunch;
 import com.example.denis.privathelper.activities.InfoLaunchActivity;
 import com.example.denis.privathelper.pojos.AtmDevice;
 import com.example.denis.privathelper.pojos.AtmResponse;
 import com.example.denis.privathelper.pojos.Statement;
+import com.example.denis.privathelper.pojos.TerminalResponse;
 import com.example.denis.privathelper.retro_util.ApiUtils;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Main activity what provide opportunity to edit
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // request to privat api
                 getStatementsFromAPI();
+
             }
         });
         toInfo = (Button) findViewById(R.id.toInfoButton);
@@ -157,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Build retrofit instance with base url and gson factory
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PRIVAT_API)
                 .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(PRIVAT_API)
                 .build();
 
         //Create instance of our interface what hold GET methods
@@ -173,21 +177,17 @@ public class MainActivity extends AppCompatActivity {
         );
         call.enqueue(new Callback<ArrayList<Statement>>() {
             @Override
-            public void onResponse(Call<ArrayList<Statement>> call,
-                                   Response<ArrayList<Statement>> response) {
+            public void onResponse(Response<ArrayList<Statement>> response) {
                 statementList = response.body();
                 if(statementList != null)
                     toInfo.setEnabled(true);
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Statement>> call, Throwable t) {
+            public void onFailure(Throwable t) {
                 t.getStackTrace();
             }
         });
-
-        Toast.makeText(MainActivity.this, "Data is get, click on 'info', to see result "
-                            , Toast.LENGTH_SHORT).show();
 
     }
 
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                                                              editAtmCity.getText().toString());
         atmResponseCall.enqueue(new Callback<AtmResponse>() {
             @Override
-            public void onResponse(Call<AtmResponse> call, Response<AtmResponse> response) {
+            public void onResponse(Response<AtmResponse> response) {
                 atmResponse = response.body();
 
                 atmDevices =(ArrayList<AtmDevice>) atmResponse.devices;
@@ -210,11 +210,21 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<AtmResponse> call, Throwable t) {
+            public void onFailure(Throwable t) {
                 t.getStackTrace();
             }
         });
     }
+
+    public void getTerminals(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PRIVAT_API)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiUtils apiUtils = retrofit.create(ApiUtils.class);
+        Call<TerminalResponse> call = apiUtils.getTerminals(editTerminals.getText().toString(), null);
+    }
+
 
     public void toInfoActivity(){
         startActivity(new Intent(this, InfoLaunchActivity.class).putExtra("stateList", statementList));
