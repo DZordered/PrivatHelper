@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.denis.privathelper.activities.InfoLaunchActivity">
+    tools:context="com.example.denis.privathelper.activities.TerminalsInfoActivity">
 
     <Button
         android:layout_width="wrap_content"
@@ -20,9 +20,9 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/departmentsListView"
-        android:layout_above="@+id/backButtonFromTerminalsInfo"
+        android:id="@+id/terminalsList"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:layout_above="@+id/backButtonFromTerminalsInfo"
         android:choiceMode="singleChoice" />
-
 </RelativeLayout>

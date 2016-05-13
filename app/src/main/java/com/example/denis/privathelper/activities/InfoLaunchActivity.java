@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.denis.privathelper.MainActivity;
 import com.example.denis.privathelper.R;
@@ -48,23 +47,19 @@ public class InfoLaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_launch);
-
-        list = getIntent().getParcelableArrayListExtra("stateList");
-
         setComponents();
-
-
     }
 
     public void setComponents(){
-        goBack = (Button)findViewById(R.id.backButton);
+        list = getIntent().getParcelableArrayListExtra("stateList");
+        goBack = (Button)findViewById(R.id.backButtonFromTerminalsInfo);
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(InfoLaunchActivity.this, MainActivity.class));
             }
         });
-        statementsView = (ListView) findViewById(R.id.listView);
+        statementsView = (ListView) findViewById(R.id.departmentsListView);
         stAdapter = new StatementsAdapter(this, R.layout.statement_items, list);
         statementsView.setAdapter(stAdapter);
         statementsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

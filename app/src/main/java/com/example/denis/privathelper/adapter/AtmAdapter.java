@@ -42,6 +42,6 @@ public class AtmAdapter extends ArrayAdapter<AtmDevice> {
         latitudeAtm.setText(atmDevice.latitude);
         longtitudeAtm.setText(atmDevice.longitude);
 
-        return convertView;
+        return newView;
     }
 }

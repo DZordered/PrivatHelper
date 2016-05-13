@@ -42,6 +42,7 @@ public class StatementsAdapter extends ArrayAdapter<Statement> {
         addressView.setText(statement.address);
         phoneView.setText(statement.phone);
         emailView.setText(statement.email);
-        return convertView;
+
+        return newView;
     }
 }

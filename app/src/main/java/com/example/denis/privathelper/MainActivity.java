@@ -1,18 +1,23 @@
 package com.example.denis.privathelper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.denis.privathelper.activities.InfoAtmLaunch;
 import com.example.denis.privathelper.activities.InfoLaunchActivity;
+import com.example.denis.privathelper.activities.TerminalsInfoActivity;
 import com.example.denis.privathelper.pojos.AtmDevice;
 import com.example.denis.privathelper.pojos.AtmResponse;
 import com.example.denis.privathelper.pojos.Statement;
+import com.example.denis.privathelper.pojos.TerminalDevice;
 import com.example.denis.privathelper.pojos.TerminalResponse;
 import com.example.denis.privathelper.retro_util.ApiUtils;
 
@@ -56,7 +61,10 @@ public class MainActivity extends AppCompatActivity {
      * The address in city (street)
      */
     private EditText editAtmAddress;
-    private EditText editTerminals; // NOP in that version
+
+    private EditText editTerminalCity;
+
+    private EditText editTerminalAddress;
 
     /**
      * Get all departments on click
@@ -67,10 +75,14 @@ public class MainActivity extends AppCompatActivity {
      * Get all ATM's on click
      */
     private Button getAtms;
+
+    private Button getTerminals;
+
+    private Button toTerminalInfo;
     /**
      * Go to info about (list of) ATM's
      */
-    private Button toInfoAtmButton;
+    private Button toAtmInfo;
     /**
      * Go to info about (list of) departments
      */
@@ -79,15 +91,20 @@ public class MainActivity extends AppCompatActivity {
     /**
      * List of Statements(departments, of course) what we get from response
      */
-    public ArrayList<Statement> statementList;
+    private ArrayList<Statement> statementList;
     /**
      * List of ATM devices what we get from response
      */
-    public ArrayList<AtmDevice> atmDevices;
+    private ArrayList<AtmDevice> atmDevices;
     /**
      * High hierarchy object, what we get from response
      */
-    public AtmResponse atmResponse;
+    private AtmResponse atmResponse;
+
+    private TerminalResponse terminalResponse;
+
+    private ArrayList<TerminalDevice> terminalDevices;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
     public void setComponents(){
         editCity = (EditText) findViewById(R.id.editCity);
         editAddress = (EditText) findViewById(R.id.editAddress);
-        editAtmAddress = (EditText) findViewById(R.id.addressAtmEdit);
+        editAtmAddress = (EditText) findViewById(R.id.editAtmAddress);
         editAtmCity = (EditText) findViewById(R.id.editAtmCity);
+        editTerminalCity = (EditText) findViewById(R.id.editTerminalsCity);
+        editTerminalAddress = (EditText) findViewById(R.id.editTerminalAddress);
 
         getStatements = (Button) findViewById(R.id.getStatementsButton);
         getStatements.setOnClickListener(new View.OnClickListener() {
@@ -139,16 +158,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        toInfoAtmButton = (Button) findViewById(R.id.toInfoAtmButton);
-        if(toInfoAtmButton != null) {
-            toInfoAtmButton.setEnabled(false);
+        toAtmInfo = (Button) findViewById(R.id.toInfoAtmButton);
+        if(toAtmInfo != null) {
+            toAtmInfo.setEnabled(false);
         }
-        toInfoAtmButton.setOnClickListener(new View.OnClickListener() {
+        toAtmInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // go to list with ATM's
                 toAtmInfoActivity();
+            }
+        });
+
+        getTerminals = (Button) findViewById(R.id.getTerminalsInfo);
+        getTerminals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getTerminals();
+            }
+        });
+
+        toTerminalInfo = (Button) findViewById(R.id.toTerminalInfo);
+        if(toTerminalInfo != null){
+            toTerminalInfo.setEnabled(false);
+        }
+        toTerminalInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toTerminalInfoActivity();
             }
         });
     }
@@ -206,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
                 atmDevices =(ArrayList<AtmDevice>) atmResponse.devices;
 
-                if(atmResponse != null) toInfoAtmButton.setEnabled(true);
+                if(atmResponse != null) toAtmInfo.setEnabled(true);
             }
 
             @Override
@@ -222,7 +260,23 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiUtils apiUtils = retrofit.create(ApiUtils.class);
-        Call<TerminalResponse> call = apiUtils.getTerminals(editTerminals.getText().toString(), null);
+        Call<TerminalResponse> call = apiUtils.getTerminals(editTerminalCity.getText().toString(),
+                                                            editTerminalAddress.getText().toString());
+        call.enqueue(new Callback<TerminalResponse>() {
+            @Override
+            public void onResponse(Response<TerminalResponse> response) {
+                terminalResponse = response.body();
+
+                terminalDevices =(ArrayList<TerminalDevice>) terminalResponse.devices;
+
+                if(terminalResponse != null) toTerminalInfo.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.getStackTrace();
+            }
+        });
     }
 
 
@@ -231,5 +285,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void toAtmInfoActivity(){
         startActivity(new Intent(this, InfoAtmLaunch.class).putExtra("atmList", atmDevices));
+    }
+
+    public void toTerminalInfoActivity(){
+        startActivity(new Intent(this, TerminalsInfoActivity.class).putExtra("terminalsList", terminalDevices));
+
     }
 }
